@@ -1,0 +1,228 @@
+Week 1 Project:
+Part 1: From the dataset above, write Python code to answer the following questions:
+
+1. Find all records where the weather was exactly clear.
+
+import pandas as pd
+
+df = pd.read_csv(r"C:\Users\user\OneDrive\Desktop\Lux Academy DS work\1. Weather data.csv")
+clear_weather_df = df[df['Weather'] == 'Clear']
+
+print(clear_weather_df)
+
+
+
+
+
+2. Find the number of times the wind speed was exactly 4 km/hr. - 474 times
+
+import pandas as pd
+
+# The line defines the Path to the CSV file
+csv_file_path = r"C:\Users\user\OneDrive\Desktop\Lux Academy DS work\1. Weather data.csv"
+
+
+df = pd.read_csv(csv_file_path)
+
+
+# The line filters the DataFrame to find all records where the wind speed is 4 km/hr
+wind_speed_4_df = df[df['Wind Speed_km/h'] == 4]
+
+# The number of such records are counted.
+count_wind_speed_4 = wind_speed_4_df.shape[0]
+
+# Display count
+print(f"The wind speed was exactly 4 km/hr {count_wind_speed_4} times.")
+
+
+
+
+
+3. Check if there are any NULL values present in the dataset. - The dataset does not contain NULL values.
+import pandas as pd
+def check_null_values(csv_file_path):
+    
+
+    df = pd.read_csv(csv_file_path)
+    
+    # The line checks for NULL values in the DataFrame
+    has_null_values = df.isnull().values.any()
+    
+    return has_null_values
+
+
+csv_file_path = r"C:\Users\user\OneDrive\Desktop\Lux Academy DS work\1. Weather data.csv" 
+if check_null_values(csv_file_path):
+    print("The dataset contains NULL values.")
+else:
+    print("The dataset does not contain NULL values.")
+
+
+
+
+4. Rename the column "Weather" to "Weather_Condition." 
+import pandas as pd
+
+
+def rename_column(csv_file_path):
+   
+   
+   df = pd.read_csv(csv_file_path)
+
+   
+   df.rename(columns={'Weather': 'Weather_Condition'}, inplace=True)
+    
+   return df
+
+
+csv_file_path = r"C:\Users\user\OneDrive\Desktop\Lux Academy DS work\1. Weather data.csv"  
+df_renamed = rename_column(csv_file_path)
+
+# The line displays the first few rows of the DataFrame to verify the change
+print(df_renamed.head())
+
+
+
+
+
+5. What is the mean visibility of the dataset? - The mean visibility is: 27.664446721311478 km
+import pandas as pd
+
+def mean_visibility(csv_file_path):
+    
+    
+    df = pd.read_csv(csv_file_path)
+    
+    # The line calculates the mean of the visibility in the visibility column
+    mean_visibility_value = df['Visibility_km'].mean()
+    
+    return mean_visibility_value
+
+
+csv_file_path = r"C:\Users\user\OneDrive\Desktop\Lux Academy DS work\1. Weather data.csv"  # Replace with your actual CSV file path
+mean_visibility_value = mean_visibility(csv_file_path)
+print(f"The mean visibility is: {mean_visibility_value} km")
+
+
+
+
+
+6. Find the number of records where the wind speed is greater than 24 km/hr and visibility is equal to 25 km. - 308 records
+import pandas as pd
+def count_records(csv_file_path):
+    
+
+    
+    df = pd.read_csv(csv_file_path)
+    
+    # The line filters the DataFrame based on the conditions given.
+    filtered_df = df[(df['Wind Speed_km/h'] > 24) & (df['Visibility_km'] == 25)]
+    
+    # The line counts the number of records meeting the conditions
+    record_count = filtered_df.shape[0]
+    
+    return record_count
+
+
+csv_file_path = r"C:\Users\user\OneDrive\Desktop\Lux Academy DS work\1. Weather data.csv"
+record_count = count_records(csv_file_path)
+print(f"The number of records with wind speed > 24 km/hr and visibility = 25 km is: {record_count}")
+
+
+
+
+
+7. What is the mean value of each column for each weather condition?
+import pandas as pd
+
+def mean_values_by_weather_condition(csv_file_path):
+      
+
+    
+    df = pd.read_csv(csv_file_path)
+    
+    # The line selects only numeric columns is the dataset
+    numeric_df = df.select_dtypes(include=['number'])
+    
+    # The line groups by the 'Weather' column and calculates the mean for each group
+    mean_values = numeric_df.groupby(df['Weather']).mean()
+    
+    return mean_values
+
+
+csv_file_path = r"C:\Users\user\OneDrive\Desktop\Lux Academy DS work\1. Weather data.csv"
+mean_values = mean_values_by_weather_condition(csv_file_path)
+print(mean_values)
+
+
+
+
+
+8. Find all instances where the weather is clear and the relative humidity is greater than 50, or visibility is above 40.
+
+import pandas as pd
+
+def find_clear_weather_instances(csv_file_path):
+
+
+    df = pd.read_csv(csv_file_path)
+    
+    # The line prints the columns in the DataFrame for debugging
+    print("Columns in the DataFrame:", df.columns.tolist())
+
+    # The line filters the DataFrame based on the conditions
+    filtered_df = df[
+        (df['Weather'] == 'Clear') &
+        ((df['Rel Hum_%'] > 50) | (df['Visibility_km'] > 40))
+    ]
+    
+    return filtered_df
+    
+
+csv_file_path = r"C:\Users\user\OneDrive\Desktop\Lux Academy DS work\1. Weather data.csv" 
+filtered_data = find_clear_weather_instances(csv_file_path)
+print(filtered_data)
+
+
+
+
+
+9. Find the number of weather conditions that include snow. - The number of weather conditions that include 'snow' is: 66
+import pandas as pd
+
+def count_snow_conditions(csv_file_path):
+
+
+    df = pd.read_csv(csv_file_path)
+    print("Columns in the DataFrame:", df.columns.tolist())
+    
+    # The line ensures the 'Weather' column is in the DataFrame
+    if 'Weather' not in df.columns:
+        raise ValueError("The 'Weather' column is not present in the DataFrame")
+    
+    # The line converts the 'Weather' column to string to handle any non-string values
+    df['Weather'] = df['Weather'].astype(str)
+    
+    # The line filters the DataFrame for weather conditions containing the term 'snow'
+    snow_conditions = df[df['Weather'].str.contains('Snow Showers', case=False, na=False)]
+    
+    # The line finds weather conditions that include 'snow'
+    snow_conditions = snow_conditions['Weather']
+    
+    # The line counts the number of snow conditions
+    num_unique_snow_conditions = len(snow_conditions)
+    
+    return num_unique_snow_conditions
+
+
+csv_file_path = r"C:\Users\user\OneDrive\Desktop\Lux Academy DS work\1. Weather data.csv"
+num_snow_conditions = count_snow_conditions(csv_file_path)
+print(f"The number of weather conditions that include 'snow' is: {num_snow_conditions}")
+
+
+
+
+
+Part 2: Move this CSV into a database of your choice and use SQL to answer 4 of the questions above.
+
+
